@@ -1,90 +1,94 @@
-module.exports = (text) => {
-  let markdownTextLines = text.split('\n');
+const linkRegExp = /\[([^\[]+)[ ]([^\[]+)]/; /* [url text] */
+const boldRegExp = /<\s*b[^>]*>(.*)<\s*\/\s*b>/g; /* <b>bold text</b> */
+const italicRegExp = /(<i>)|(<\/i>)/g;
+const headingRegExp = /^[=]{1,6}(.*)[=]{1,6}/g;
+const unorderedList = /^[*](.*)/g;
+const orderedList = /^[#]{1}(^#.*)[^#]/g;
+const blockquoteRegExp = /<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g;
 
-  /* parse bold text */
-  markdownTextLines = markdownTextLines.map(line => {
-    if (line.match(/<\s*b[^>]*>(.*)<\s*\/\s*b>/g)) {
-      return line.replace('<b>', '**').replace('</b>', '**');
-    } else {
-      return line;
+function parseBoldStyle(line) {
+  if (line.match(boldRegExp)) {
+    return line.replace('<b>', '**').replace('</b>', '**');
+  } else {
+    return line;
+  }
+}
+
+function parseItalic(line) {
+  return line
+    .replace(/([^\\])[_]/g, `$1\\_`) /* simple underscore first */
+    .replace(italicRegExp, '_') /* wikitext to mardown next */;
+}
+
+function parseHeadings(line) {
+  if (line.match(headingRegExp)) {
+    let level = 0
+    let heading = '#'
+    while (line[++level] === '=') {
+      heading += '#'
     }
-  });
+    return heading + ' ' + line.slice(level, line.length - level)
+  } else {
+    return line
+  }
+}
 
-  /* parse italic text */
-  markdownTextLines = markdownTextLines.map(line => line
-    .replace(/([^\\])[_]/g, `$1\\_`) /* simple symbols first */
-    .replace(/(<i>)|(<\/i>)/g, '_') /* wikitext to mardown next */
-  );
+function parseUnorderedList(line) {
+  if (line.match(unorderedList)) {
+    return '- ' + line.slice(2, line.length);
+  } else {
+    return line;
+  }
+}
 
-  /* parse headings (H1-H6) */
-  markdownTextLines = markdownTextLines.map(line => {
-    if (line.match(/^[=]{1,6}(.*)[=]{1,6}/g)) {
-      let level = 0
-      let heading = '#'
-      while (line[++level] === '=') {
-        heading += '#'
+function parseOrderedList(line) {
+  if (line.match(orderedList)) {
+    return '1.' + line.slice(2, line.length);
+  } else {
+    return line;
+  }
+}
+
+function parseBlockqoute(line) {
+  if (line.match(blockquoteRegExp)) {
+    let result = line.replace('<blockquote>', '').replace('</blockquote>', '');
+
+    return '> ' + result;
+  } else {
+    return line;
+  }
+}
+
+function parseLink(line) {
+  let countLinks = line.match(new RegExp(linkRegExp, 'g'));
+  if (!countLinks) {
+    return line;
+  } else {
+    for (let i = 0; i < countLinks.length; i++) {
+      let firstSymbolOfLink = line.search(new RegExp(linkRegExp, 'i'));
+
+      let url = '';
+      while (line[++firstSymbolOfLink] !== ' ') { /* find url */
+        url += line[firstSymbolOfLink];
       }
-      return heading + ' ' + line.slice(level, line.length - level)
-    } else {
-      return line
-    }
-  });
 
-  /* parse lists (unordered) */
-  markdownTextLines = markdownTextLines.map(line => {
-    if (line.match(/^[*](.*)/g)) {
-      return '- ' + line.slice(2, line.length);
-    } else {
-      return line;
-    }
-  });
-
-  /* parse lists (ordered) */
-  markdownTextLines = markdownTextLines.map(line => {
-    if (line.match(/^[#]{1}(^#.*)[^#]/g)) {
-      return '1.' + line.slice(2, line.length);
-    } else {
-      return line;
-    }
-  });
-
-  /* parse blockquote */
-  markdownTextLines = markdownTextLines.map(line => {
-    if (line.match(/<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g)) {
-      let result = line.replace('<blockquote>', '').replace('</blockquote>', '');
-
-      return '> ' + result;
-    } else {
-      return line;
-    }
-  });
-
-  const linkRegExp = /\[([^\[]+)[ ]([^\[]+)]/;
-
-  /* parse link */
-  markdownTextLines = markdownTextLines.map(line => {
-    let countLinks = line.match(new RegExp(linkRegExp, 'g'));
-    if (!countLinks) {
-      return line;
-    } else {
-      for (let i = 0; i < countLinks.length; i++) {
-        let firstSymbolOfLink = line.search(new RegExp(linkRegExp, 'i'));
-
-        let url = '';
-        while (line[++firstSymbolOfLink] !== ' ') { /* find url */
-          url += line[firstSymbolOfLink];
-        }
-
-        let text = '';
-        while (line[++firstSymbolOfLink] !== ']') { /* find text */
-          text += line[firstSymbolOfLink];
-        }
-
-        line = line.replace(linkRegExp, `[${text}](${url})`);
+      let text = '';
+      while (line[++firstSymbolOfLink] !== ']') { /* find text */
+        text += line[firstSymbolOfLink];
       }
-      return line;
-    }
-  });
 
-  return markdownTextLines.join('\n')
-};
+      line = line.replace(linkRegExp, `[${text}](${url})`);
+    }
+    return line;
+  }
+}
+
+module.exports = text => text.split('\n')
+  .map(parseBoldStyle)
+  .map(parseItalic)
+  .map(parseHeadings)
+  .map(parseUnorderedList)
+  .map(parseOrderedList)
+  .map(parseBlockqoute)
+  .map(parseLink)
+  .join('\n')
