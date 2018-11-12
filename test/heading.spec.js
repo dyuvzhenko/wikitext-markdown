@@ -1,46 +1,103 @@
-const { wikitextToMarkdown, markdownToWikitext } = require('../src'); // TODO: remove
-const testTexts = require('./utils/testTexts');
+const { wikitextToMarkdown, markdownToWikitext } = require('../src');
 
-describe('Heading tests', () => {
-  it('common test', () => {
-    const wikiText = '===Heading===';
-    const markdownText = '### Heading';
-    // testTexts(wikiText, markdownText);
+const MAX_LEVEL_HEADING = 6;
+
+describe('Heading tests (wiki to markdown)', () => {
+  it('should change heading (without one space after and before heading text)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + `Heading ${i}` + '='.repeat(i); // `===Heading 3===`
+      const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // `### Heading 3`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
   });
 
-  it('should change headings', () => {
-    const text = '= Heading =';
-    const expectedText = '# Heading';
-    expect(wikitextToMarkdown(text)).toEqual(expectedText);
+  it('should change heading (with many words)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + `Heading with many words ${i}` + '='.repeat(i); // `===Heading with many words 3===`
+      const markdownText = '#'.repeat(i) + ' ' + `Heading with many words ${i}`; // `### Heading with many words 3`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
   });
 
-  it('should change headings', () => {
-    const text = '= Heading=';
-    const expectedText = '# Heading';
-    expect(wikitextToMarkdown(text)).toEqual(expectedText);
+  it('should change heading (with one space after and before heading text)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + ' ' + `Heading ${i}` + ' ' + '='.repeat(i); // `=== Heading 3 ===`
+      const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // `### Heading 3`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
   });
 
-  it('should change headings', () => {
-    const text = '=Heading =';
-    const expectedText = '# Heading';
-    expect(wikitextToMarkdown(text)).toEqual(expectedText);
+  it('should change heading (with one space before heading text)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + ' ' + `Heading ${i}` + '='.repeat(i); // `=== Heading 3===`
+      const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // `### Heading 3`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
   });
 
-  it('should change headings', () => {
-    const text = `=  Heading=`;
-    const expectedText = '#  Heading';
-    expect(wikitextToMarkdown(text)).toEqual(expectedText);
+  it('should change heading (with one space after heading text)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + `Heading ${i}` + ' ' + '='.repeat(i); // `===Heading 3 ===`
+      const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // `### Heading 3`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
   });
 
-  // it('should change headings', () => {
-  //   const text = `=Heading  =`;
-  //   const expectedText = '# Heading';
-  //   expect(wikitextToMarkdown(text)).toEqual(expectedText);
-  // });
+  it('should change heading (many spaces after markup)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + `Heading ${i}` + '='.repeat(i) + '       '; // `===Heading 3===       `
+      const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // ### Heading 3
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
+  });
 
-  // it('should change headings', () => {
-  //   const text = `== Heading ==   `;
-  //   const expectedText = '## Heading';
-  //   expect(wikitextToMarkdown(text)).toEqual(expectedText);
-  // });
+  it('should not change heading (symbol after markup)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = '='.repeat(i) + `Heading ${i}` + '='.repeat(i) + 'symbol'; // `===Heading 3===symbol`
+      const markdownText = wikiText; // `===Heading 3===symbol`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
+  });
+
+  it('should not change heading (symbol before markup)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const wikiText = 'symbol' + '='.repeat(i) + `Heading ${i}` + '='.repeat(i); // `symbol===Heading 3===`
+      const markdownText = wikiText; // `symbol===Heading 3===`
+      expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    }
+  });
+});
+
+describe('Heading tests (markdown to wiki)', () => {
+  it('should change heading', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // `### Heading 3`
+      const wikiText = '='.repeat(i) + `Heading ${i}` + '='.repeat(i); // `===Heading 3===`
+      expect(markdownToWikitext(markdownText)).toBe(wikiText);
+    }
+  });
+
+  it('should change heading (with many words)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const markdownText = '#'.repeat(i) + ' ' + `Heading with many words ${i}`; // `### Heading with many words 3`
+      const wikiText = '='.repeat(i) + `Heading with many words ${i}` + '='.repeat(i); // `===Heading with many words 3===`
+      expect(markdownToWikitext(markdownText)).toBe(wikiText);
+    }
+  });
+
+  it('should not change heading (no space after markup)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const markdownText = '#'.repeat(i) + `Heading ${i}`; // `###Heading`
+      const wikiText = markdownText; // `###Heading`
+      expect(markdownToWikitext(markdownText)).toBe(wikiText);
+    }
+  });
+
+  it('should not change heading (symbol before markup)', () => {
+    for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
+      const markdownText = 'symbol' + '#'.repeat(i) + ` Heading ${i}`; // `symbol### Heading`
+      const wikiText = markdownText; // `symbol### Heading`
+      expect(markdownToWikitext(markdownText)).toBe(wikiText);
+    }
+  });
 });

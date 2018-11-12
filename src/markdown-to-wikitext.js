@@ -1,4 +1,4 @@
-const headingRegExp = /^[#]{1,6}[ ](.*)$/g; /* ## heading */
+const headingRegExp = /^([#]{1,6})[ ](.*)$/; /* ## heading */
 const unorderedListRegExp = /^[-][ ](.*)$/g; /* - unordered list */
 const orderedListRegExp = /^\d+[.][ ](.*)$/g; /* 1. orderedList */
 const blockquoteRegExp = /^[>][ ](.*)$/g; /* > text */
@@ -7,18 +7,9 @@ const boldRegExp = /[*][*]/i; /* **bold text** */
 const italicRegExp = /([^\\])_/i; /* _italic text_ */
 
 function parseHeadings(line) {
-  if (line.match(/^[#]{1,6}[ ](.*)$/g)) {
-    let level = 0,
-        rightSide = '',
-        leftSide = ''
-    while (line[level++] === '#') {
-      rightSide += '='
-      leftSide += '='
-    }
-    return leftSide + line.slice(level, line.length) + rightSide
-  } else {
-    return line
-  }
+  return line.match(headingRegExp) ?
+    line.replace(headingRegExp, ("=".repeat(RegExp.$1.length)) + RegExp.$2 + ("=".repeat(RegExp.$1.length))) :
+    line
 }
 
 function parseUnorderedList(line) {

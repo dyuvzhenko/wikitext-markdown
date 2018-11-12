@@ -1,10 +1,19 @@
-const headingRegExp = /^([=]{1,6})[ ]{0,1}(.*)[ ]{0,1}[=]{1,6}/g; /* == heading == */
+const headingRegExp = /^([=]{1,6})[ ]{0,1}([^=]*)[ ]{0,1}([=]{1,6})[ ]*$/; /* == heading == */
 const unorderedListRegExp = /^[*](.*)/g; /* * unordered list */
-const orderedListRegExp = /^[#]{1}(^#.*)[^#]/g; /* # orderedList */
+const orderedListRegExp = /^[#]{1}[ ]{1}(.*)/g; /* # orderedList */
 const blockquoteRegExp = /<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g; /* <blockquote>text</blockquote> */
 const linkRegExp = /\[([^\[]+)[ ]([^\[]+)]/; /* [url text] */
 const boldRegExp = /<\s*b[^>]*>(.*)<\s*\/\s*b>/g; /* <b>bold text</b> */
 const italicRegExp = /(<i>)|(<\/i>)/g; /* <i>italic text</i> */
+
+/* must go after parseHeadings */
+function parseOrderedList(line) {
+  if (line.match(orderedListRegExp)) {
+    return '1. ' + line.slice(2, line.length);
+  } else {
+    return line;
+  }
+}
 
 function parseHeadings(line) {
   return line.match(headingRegExp) ?
@@ -15,14 +24,6 @@ function parseHeadings(line) {
 function parseUnorderedList(line) {
   if (line.match(unorderedListRegExp)) {
     return '- ' + line.slice(2, line.length);
-  } else {
-    return line;
-  }
-}
-
-function parseOrderedList(line) {
-  if (line.match(orderedListRegExp)) {
-    return '1.' + line.slice(2, line.length);
   } else {
     return line;
   }
@@ -78,9 +79,9 @@ function parseItalic(line) {
 }
 
 module.exports = text => text.split('\n')
+  .map(parseOrderedList)
   .map(parseHeadings)
   .map(parseUnorderedList)
-  .map(parseOrderedList)
   .map(parseBlockqoute)
   .map(parseLink)
   .map(parseBoldStyle)
