@@ -3,7 +3,8 @@ const { wikitextToMarkdown, markdownToWikitext } = require('../src');
 const wikiText = `
 =Heading=
 
-Some <i>italic</i> and <b>bold</b> words.
+Some ''italic'' and '''bold''' words.
+And '''bold''' in another variant.
 And link: [url text].
 
 <blockquote>Text in blockquote</blockquote>
@@ -22,6 +23,7 @@ const markdownText = `
 # Heading
 
 Some _italic_ and **bold** words.
+And **bold** in another variant.
 And link: [text](url).
 
 > Text in blockquote

@@ -3,8 +3,8 @@ const unorderedListRegExp = /^[*](.*)/g; /* * unordered list */
 const orderedListRegExp = /^[#]{1}[ ]{1}(.*)/g; /* # orderedList */
 const blockquoteRegExp = /<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g; /* <blockquote>text</blockquote> */
 const linkRegExp = /\[([^\[]+)[ ]([^\[]+)]/; /* [url text] */
-const boldRegExp = /<\s*b[^>]*>(.*)<\s*\/\s*b>/g; /* <b>bold text</b> */
-const italicRegExp = /(<i>)|(<\/i>)/g; /* <i>italic text</i> */
+const boldRegExp = /<b>|<\/b>|'''/g; /* <b>bold text</b> or '''bold text''' */
+const italicRegExp = /\'\'/g; /* <i>italic text</i> */
 
 /* must go after parseHeadings */
 function parseOrderedList(line) {
@@ -64,18 +64,13 @@ function parseLink(line) {
 }
 
 function parseBoldStyle(line) {
-  if (line.match(boldRegExp)) {
-    return line.replace('<b>', '**').replace('</b>', '**');
-  } else {
-    return line;
-  }
+  return line.replace(boldRegExp, '**');
 }
 
 function parseItalic(line) {
   return line
-    .replace(/([^\\])[_]/g, `$1\\_`) /* simple underscore first */
+    .replace(/([^\\]{0,1})[_]/g, `$1\\_`) /* screen simple underscore first */
     .replace(italicRegExp, '_') /* wikitext to mardown next */
-    // TODO: return simple underscore without screen?
 }
 
 module.exports = text => text.split('\n')

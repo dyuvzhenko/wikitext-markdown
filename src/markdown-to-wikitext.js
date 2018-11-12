@@ -3,8 +3,8 @@ const unorderedListRegExp = /^[-][ ](.*)$/g; /* - unordered list */
 const orderedListRegExp = /^\d+[.][ ](.*)$/g; /* 1. orderedList */
 const blockquoteRegExp = /^[>][ ](.*)$/g; /* > text */
 const linkRegExp = /\[([^\[])+\]\(([^\(])+\)/g; /* [textl](url) */
-const boldRegExp = /[*][*]/i; /* **bold text** */
-const italicRegExp = /([^\\])_/i; /* _italic text_ */
+const boldRegExp = /[*][*]/g; /* **bold text** */
+const italicRegExp = /([^\\]{0,1})_/g; /* _italic text_ */
 
 function parseHeadings(line) {
   return line.match(headingRegExp) ?
@@ -56,30 +56,13 @@ function parseLink(line) {
 };
 
 function parseBoldStyle(line) {
-  const countBoldSymbols = line.match(/[*][*]/g)
-  if (!countBoldSymbols) {
-    return line
-  } else {
-    for (let i = 0; i < Math.floor(countBoldSymbols.length / 2); i++) {
-      line = line.replace(boldRegExp, '<b>').replace(boldRegExp, '</b>')
-    }
-    return line
-  }
+  return line.replace(boldRegExp, `'''`)
 }
 
 function parseItalic(line) {
-  /* first take `_` in markdown meanings and translate it to `<i>` and `</i>` */
-  const markdownItalicSymbols = line.match(/([^\\])_/g)
-  if (!markdownItalicSymbols) {
-    return line
-  } else {
-    for (let i = 0; i < Math.floor(markdownItalicSymbols.length / 2); i++) {
-      line = line.replace(italicRegExp, `$1<i>`).replace(italicRegExp, '$1</i>')
-    }
-  }
-
-  /* then take all simple symbol `_` who is screened and write it without `\` */
-  return line.replace(/\\[_]/g, '_')
+  return line
+    .replace(italicRegExp, `$1''`) /* first take `_` in markdown meanings and translate it to '' and '' */
+    .replace(/\\[_]/g, '_') /* then take all simple symbol `_` who is screened and write it without `\` */
 }
 
 module.exports = text => text.split('\n')

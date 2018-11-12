@@ -2,7 +2,7 @@ const { wikitextToMarkdown, markdownToWikitext } = require('../src');
 
 const MAX_LEVEL_HEADING = 6;
 
-describe('Heading tests (wiki to markdown)', () => {
+describe('Tests on heading markup (wiki to markdown)', () => {
   it('should change heading (without one space after and before heading text)', () => {
     for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
       const wikiText = '='.repeat(i) + `Heading ${i}` + '='.repeat(i); // `===Heading 3===`
@@ -68,7 +68,7 @@ describe('Heading tests (wiki to markdown)', () => {
   });
 });
 
-describe('Heading tests (markdown to wiki)', () => {
+describe('Tests on heading markup (markdown to wiki)', () => {
   it('should change heading', () => {
     for (let i = 1; i <= MAX_LEVEL_HEADING; i++) {
       const markdownText = '#'.repeat(i) + ' ' + `Heading ${i}`; // `### Heading 3`
