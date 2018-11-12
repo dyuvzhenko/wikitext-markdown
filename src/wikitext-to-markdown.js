@@ -1,40 +1,19 @@
+const headingRegExp = /^([=]{1,6})[ ]{0,1}(.*)[ ]{0,1}[=]{1,6}/g; /* == heading == */
+const unorderedListRegExp = /^[*](.*)/g; /* * unordered list */
+const orderedListRegExp = /^[#]{1}(^#.*)[^#]/g; /* # orderedList */
+const blockquoteRegExp = /<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g; /* <blockquote>text</blockquote> */
 const linkRegExp = /\[([^\[]+)[ ]([^\[]+)]/; /* [url text] */
 const boldRegExp = /<\s*b[^>]*>(.*)<\s*\/\s*b>/g; /* <b>bold text</b> */
-const italicRegExp = /(<i>)|(<\/i>)/g;
-const headingRegExp = /^[=]{1,6}(.*)[=]{1,6}/g;
-const unorderedList = /^[*](.*)/g;
-const orderedList = /^[#]{1}(^#.*)[^#]/g;
-const blockquoteRegExp = /<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g;
-
-function parseBoldStyle(line) {
-  if (line.match(boldRegExp)) {
-    return line.replace('<b>', '**').replace('</b>', '**');
-  } else {
-    return line;
-  }
-}
-
-function parseItalic(line) {
-  return line
-    .replace(/([^\\])[_]/g, `$1\\_`) /* simple underscore first */
-    .replace(italicRegExp, '_') /* wikitext to mardown next */;
-}
+const italicRegExp = /(<i>)|(<\/i>)/g; /* <i>italic text</i> */
 
 function parseHeadings(line) {
-  if (line.match(headingRegExp)) {
-    let level = 0
-    let heading = '#'
-    while (line[++level] === '=') {
-      heading += '#'
-    }
-    return heading + ' ' + line.slice(level, line.length - level)
-  } else {
-    return line
-  }
+  return line.match(headingRegExp) ?
+    line.replace(headingRegExp, ("#".repeat(RegExp.$1.length) + ` $2`)).replace(/[ ]$/g, '') :
+    line
 }
 
 function parseUnorderedList(line) {
-  if (line.match(unorderedList)) {
+  if (line.match(unorderedListRegExp)) {
     return '- ' + line.slice(2, line.length);
   } else {
     return line;
@@ -42,7 +21,7 @@ function parseUnorderedList(line) {
 }
 
 function parseOrderedList(line) {
-  if (line.match(orderedList)) {
+  if (line.match(orderedListRegExp)) {
     return '1.' + line.slice(2, line.length);
   } else {
     return line;
@@ -83,12 +62,27 @@ function parseLink(line) {
   }
 }
 
+function parseBoldStyle(line) {
+  if (line.match(boldRegExp)) {
+    return line.replace('<b>', '**').replace('</b>', '**');
+  } else {
+    return line;
+  }
+}
+
+function parseItalic(line) {
+  return line
+    .replace(/([^\\])[_]/g, `$1\\_`) /* simple underscore first */
+    .replace(italicRegExp, '_') /* wikitext to mardown next */
+    // TODO: return simple underscore without screen?
+}
+
 module.exports = text => text.split('\n')
-  .map(parseBoldStyle)
-  .map(parseItalic)
   .map(parseHeadings)
   .map(parseUnorderedList)
   .map(parseOrderedList)
   .map(parseBlockqoute)
   .map(parseLink)
+  .map(parseBoldStyle)
+  .map(parseItalic)
   .join('\n')

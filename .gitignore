@@ -1,3 +1,2 @@
 node_modules/
-
-test/perfomance.spec.js
+*.log
