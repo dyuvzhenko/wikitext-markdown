@@ -1,7 +1,18 @@
-const { wikitextToMarkdown, markdownToWikitext } = require('../src');
+const { wikitextToMarkdown, markdownToWikitext } = require('../../src');
 
+/* Move this example to demo? */
 const wikiText = `
+  Headings:
+======Heading======
+=====Heading=====
+====Heading====
+===Heading===
+==Heading==
 =Heading=
+  Headings with a little different markup:
+=== Heading ===
+===Heading ===
+=== Heading===
 
 Some ''italic'' and '''bold''' words.
 And '''bold''' in another variant.
@@ -20,7 +31,17 @@ unordered list:
 * third point
 `;
 const markdownText = `
+  Headings:
+###### Heading
+##### Heading
+#### Heading
+### Heading
+## Heading
 # Heading
+  Headings with a little different markup:
+### Heading
+### Heading
+### Heading
 
 Some _italic_ and **bold** words.
 And **bold** in another variant.
@@ -42,9 +63,5 @@ unordered list:
 describe('Common tests', () => {
   it('should correctly translate two texts (markdown to wiki)', () => {
     expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
-  });
-
-  it('should correctly translate two texts (wiki to markdown)', () => {
-    expect(markdownToWikitext(markdownText)).toBe(wikiText);
   });
 });
