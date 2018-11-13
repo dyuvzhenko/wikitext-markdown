@@ -2,7 +2,7 @@ const headingRegExp = /^([#]{1,6})[ ](.*)$/; /* ## heading */
 const unorderedListRegExp = /^[-][ ](.*)$/g; /* - unordered list */
 const orderedListRegExp = /^\d+[.][ ](.*)$/g; /* 1. orderedList */
 const blockquoteRegExp = /^[>][ ](.*)$/g; /* > text */
-const linkRegExp = /\[([^\[])+\]\(([^\(])+\)/g; /* [textl](url) */
+const linkRegExp = /\[([^\[]*)\]\(([^\(]*)\)/g; /* [textl](url) */
 const boldRegExp = /[*][*]/g; /* **bold text** */
 const italicRegExp = /([^\\]{0,1})_/g; /* _italic text_ */
 
@@ -30,54 +30,9 @@ function parseBlockqoute(line) {
     line
 }
 
-// function parseLink(line) {
-//   const countLinks = line.match(new RegExp(linkRegExp, 'g'))
-//   if (!countLinks) {
-//     return line
-//   } else {
-//     for (let i = 0; i < countLinks.length; i++) {
-//       let firstSymbolOfLink = line.search(new RegExp(linkRegExp, 'i'))
-//
-//       let text = ''
-//       while (line[++firstSymbolOfLink] !== ']') { /* find text */
-//         text += line[firstSymbolOfLink]
-//       }
-//
-//       let url = ''
-//       ++firstSymbolOfLink;
-//       while (line[++firstSymbolOfLink] !== ')') { /* find url */
-//         url += line[firstSymbolOfLink]
-//       }
-//
-//       line = line.replace(linkRegExp, `[${url} ${text}]`)
-//     }
-//     return line
-//   }
-// };
 function parseLink(line) {
-  const countLinks = line.match(new RegExp(linkRegExp, 'g'))
-  if (!countLinks) {
-    return line
-  } else {
-    for (let i = 0; i < countLinks.length; i++) {
-      let firstSymbolOfLink = line.search(new RegExp(linkRegExp, 'i'))
-
-      let text = ''
-      while (line[++firstSymbolOfLink] !== ']') { /* find text */
-        text += line[firstSymbolOfLink]
-      }
-
-      let url = ''
-      ++firstSymbolOfLink;
-      while (line[++firstSymbolOfLink] !== ')') { /* find url */
-        url += line[firstSymbolOfLink]
-      }
-
-      line = line.replace(linkRegExp, `[${url} ${text}]`)
-    }
-    return line
-  }
-};
+  return line.replace(linkRegExp, `[$2 $1]`); /* [textl](url) */
+}
 
 function parseBoldStyle(line) {
   return line.replace(boldRegExp, `'''`)

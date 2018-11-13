@@ -17,7 +17,7 @@ function parseOrderedList(line) {
 
 function parseHeadings(line) {
   return line.match(headingRegExp) ?
-    line.replace(headingRegExp, ("#".repeat(RegExp.$1.length) + ` $2`)).replace(/[ ]$/g, '') :
+    line.replace(headingRegExp, ("#".repeat(RegExp.$1.length) + ` $2`)).replace(/[ ]*$/g, '') :
     line
 }
 
