@@ -5,6 +5,7 @@ const blockquoteRegExp = /^[>][ ](.*)$/g; /* > text */
 const linkRegExp = /\[([^\[]*)\]\(([^\(]*)\)/g; /* [textl](url) */
 const boldRegExp = /[*][*]/g; /* **bold text** */
 const italicRegExp = /([^\\]{0,1})_/g; /* _italic text_ */
+const codeRegExp = /`([^\`]*)`/g;
 
 function parseHeadings(line) {
   return line.match(headingRegExp) ?
@@ -22,6 +23,10 @@ function parseOrderedList(line) {
   return line.match(/^\d+[.][ ](.*)$/g) ?
     '#' + line.slice(2, line.length) :
     line
+}
+
+function parseCode(line) {
+  return line.replace(codeRegExp, `<code>$1</code>`)
 }
 
 function parseBlockqoute(line) {
@@ -48,6 +53,7 @@ module.exports = text => text.split('\n')
   .map(parseHeadings)
   .map(parseUnorderedList)
   .map(parseOrderedList)
+  .map(parseCode)
   .map(parseBlockqoute)
   .map(parseLink)
   .map(parseBoldStyle)
