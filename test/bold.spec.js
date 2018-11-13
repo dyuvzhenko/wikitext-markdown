@@ -1,6 +1,6 @@
 const { wikitextToMarkdown, markdownToWikitext } = require('../src');
 
-describe(`Tests on bold markup (wiki to markdown)`, () => {
+describe(`Tests on bold markup`, () => {
   it(`should change bold markup (first word in sentence)`, () => {
     const wikiText = `'''Lorem''' ipsum dolor sit amet`;
     const markdownText = '**Lorem** ipsum dolor sit amet';

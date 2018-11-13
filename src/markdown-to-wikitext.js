@@ -30,6 +30,30 @@ function parseBlockqoute(line) {
     line
 }
 
+// function parseLink(line) {
+//   const countLinks = line.match(new RegExp(linkRegExp, 'g'))
+//   if (!countLinks) {
+//     return line
+//   } else {
+//     for (let i = 0; i < countLinks.length; i++) {
+//       let firstSymbolOfLink = line.search(new RegExp(linkRegExp, 'i'))
+//
+//       let text = ''
+//       while (line[++firstSymbolOfLink] !== ']') { /* find text */
+//         text += line[firstSymbolOfLink]
+//       }
+//
+//       let url = ''
+//       ++firstSymbolOfLink;
+//       while (line[++firstSymbolOfLink] !== ')') { /* find url */
+//         url += line[firstSymbolOfLink]
+//       }
+//
+//       line = line.replace(linkRegExp, `[${url} ${text}]`)
+//     }
+//     return line
+//   }
+// };
 function parseLink(line) {
   const countLinks = line.match(new RegExp(linkRegExp, 'g'))
   if (!countLinks) {

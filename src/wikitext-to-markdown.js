@@ -2,11 +2,11 @@ const headingRegExp = /^([=]{1,6})[ ]{0,1}([^=]*)[ ]{0,1}([=]{1,6})[ ]*$/; /* ==
 const unorderedListRegExp = /^[*](.*)/g; /* * unordered list */
 const orderedListRegExp = /^[#]{1}[ ]{1}(.*)/g; /* # orderedList */
 const blockquoteRegExp = /<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g; /* <blockquote>text</blockquote> */
-const linkRegExp = /\[([^\[]+)[ ]([^\[]+)]/; /* [url text] */
+const linkRegExp = /\[([^\s\]\[]*)[ ]{1}([^\]\[]*)\]/g; /* [url text] */
 const boldRegExp = /<b>|<\/b>|'''/g; /* <b>bold text</b> or '''bold text''' */
 const italicRegExp = /\'\'/g; /* <i>italic text</i> */
 
-/* must go after parseHeadings */
+/* must go before parseHeadings */
 function parseOrderedList(line) {
   if (line.match(orderedListRegExp)) {
     return '1. ' + line.slice(2, line.length);
@@ -40,27 +40,7 @@ function parseBlockqoute(line) {
 }
 
 function parseLink(line) {
-  let countLinks = line.match(new RegExp(linkRegExp, 'g'));
-  if (!countLinks) {
-    return line;
-  } else {
-    for (let i = 0; i < countLinks.length; i++) {
-      let firstSymbolOfLink = line.search(new RegExp(linkRegExp, 'i'));
-
-      let url = '';
-      while (line[++firstSymbolOfLink] !== ' ') { /* find url */
-        url += line[firstSymbolOfLink];
-      }
-
-      let text = '';
-      while (line[++firstSymbolOfLink] !== ']') { /* find text */
-        text += line[firstSymbolOfLink];
-      }
-
-      line = line.replace(linkRegExp, `[${text}](${url})`);
-    }
-    return line;
-  }
+  return line.replace(linkRegExp, `[$2]($1)`)
 }
 
 function parseBoldStyle(line) {
