@@ -12,6 +12,7 @@ Headings:
 
 Some _italic_ and **bold** words.
 And **bold** in another variant.
+And code: \`code text\`
 And link: [text](url).
 
 > Text in blockquote
@@ -37,6 +38,7 @@ Headings:
 
 Some ''italic'' and '''bold''' words.
 And '''bold''' in another variant.
+And code: <code>code text</code>
 And link: [url text].
 
 <blockquote>Text in blockquote</blockquote>
