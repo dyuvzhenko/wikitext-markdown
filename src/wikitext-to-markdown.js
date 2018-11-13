@@ -48,9 +48,7 @@ function parseBoldStyle(line) {
 }
 
 function parseItalic(line) {
-  return line
-    .replace(/([^\\]{0,1})[_]/g, `$1\\_`) /* screen simple underscore first */
-    .replace(italicRegExp, '_') /* wikitext to mardown next */
+  return line.replace(italicRegExp, '_')
 }
 
 module.exports = text => text.split('\n')

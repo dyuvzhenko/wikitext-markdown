@@ -50,3 +50,29 @@ describe(`Tests on link markup`, () => {
     expect(markdownToWikitext(markdownText)).toBe(wikiText);
   });
 });
+
+describe(`Tests on link markup with inline styles inside (bold and inline)`, () => {
+  it(`should change link markup correctly with next symbol: _`, () => {
+    const markdownText = `[long_text_2](long_url_1)`;
+    const wikiText = `[long_url_1 long_text_2]`;
+    // expect(markdownToWikitext(markdownText)).toBe(wikiText);
+  });
+
+  it(`should change link markup correctly with next symbol: ''`, () => {
+    const wikiText = `[long''url''1 long''text''2]`;
+    const markdownText = `[long''text''2](long''url''1)`;
+    // expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+  });
+
+  it(`should change link markup correctly with next symbol: **`, () => {
+    const markdownText = `[long**text**2](long**url**1)`;
+    const wikiText = `[long**url**1 long**text**2]`;
+    // expect(markdownToWikitext(markdownText)).toBe(wikiText);
+  });
+
+  it(`should change link markup correctly with next symbol: '''`, () => {
+    const wikiText = `[long'''url'''1 long'''text'''2]`;
+    const markdownText = `[long'''text'''2](long'''url'''1)`;
+    // expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+  });
+});
