@@ -1,15 +1,7 @@
-const headingRegExp = /^([#]{1,6})[ ](.*)$/; /* ## heading */
-const unorderedListRegExp = /^[-][ ](.*)$/g; /* - unordered list */
-const orderedListRegExp = /^\d+[.][ ](.*)$/g; /* 1. orderedList */
-const blockquoteRegExp = /^[>][ ](.*)$/g; /* > text */
-const linkRegExp = /\[([^\[]*)\]\(([^\(]*)\)/g; /* [textl](url) */
-const boldRegExp = /[*][*]/g; /* **bold text** */
-const italicRegExp = /([^\\]{0,1})_/g; /* _italic text_ */
-const codeRegExp = /`([^\`]*)`/g;
-
+// markdown-to-wikitext.js
 function parseHeadings(line) {
-  return line.match(headingRegExp) ?
-    line.replace(headingRegExp, ("=".repeat(RegExp.$1.length)) + RegExp.$2 + ("=".repeat(RegExp.$1.length))) :
+  return line.match(/^([#]{1,6})[ ](.*)$/) ?
+    line.replace(/^([#]{1,6})[ ](.*)$/, ("=".repeat(RegExp.$1.length)) + RegExp.$2 + ("=".repeat(RegExp.$1.length))) :
     line
 }
 
@@ -26,11 +18,10 @@ function parseOrderedList(line) {
 }
 
 function parseCode(line) {
-  return line.replace(codeRegExp, `<code>$1</code>`)
+  return line.replace(/`([^\`]*)`/g, `<code>$1</code>`)
 }
 
-/* must go before parseBold and parseItalic */
-function parseBoldAndItalic(line) {
+function parseBoldAndItalic(line) { /* must go before parseBold and parseItalic */
   return line.replace(/[\*]{3}([^\*]*)[\*]{3}/g, `'''''$1'''''`)
 }
 
@@ -41,16 +32,16 @@ function parseBlockqoute(line) {
 }
 
 function parseLink(line) {
-  return line.replace(linkRegExp, `[$2 $1]`); /* [textl](url) */
+  return line.replace(/\[([^\[]*)\]\(([^\(]*)\)/g, `[$2 $1]`); /* [textl](url) */
 }
 
 function parseBold(line) {
-  return line.replace(boldRegExp, `'''`)
+  return line.replace(/[*]{2}/g, `'''`)
 }
 
 function parseItalic(line) {
   return line
-    .replace(italicRegExp, `$1''`) /* first take `_` in markdown meanings and translate it to '' and '' */
+    .replace(/([^\\]{0,1})_/g, `$1''`) /* first take `_` in markdown meanings and translate it to '' and '' */
     .replace(/\\[_]/g, '_') /* then take all simple symbol `_` who is screened and write it without `\` */
 }
 
