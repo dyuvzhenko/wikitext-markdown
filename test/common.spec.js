@@ -1,4 +1,4 @@
-const { wikitextToMarkdown, markdownToWikitext } = require('../../src');
+const testTexts = require('./_testTexts');
 
 /* Move this example to demo? */
 const wikiText = `
@@ -9,13 +9,10 @@ const wikiText = `
 ===Heading===
 ==Heading==
 =Heading=
-  Headings with a little different markup:
-=== Heading ===
-===Heading ===
-=== Heading===
 
 Some ''italic'' and '''bold''' words.
 And '''bold''' in another variant.
+And code: <code>code text</code>
 And link: [url text].
 
 <blockquote>Text in blockquote</blockquote>
@@ -38,13 +35,10 @@ const markdownText = `
 ### Heading
 ## Heading
 # Heading
-  Headings with a little different markup:
-### Heading
-### Heading
-### Heading
 
 Some _italic_ and **bold** words.
 And **bold** in another variant.
+And code: \`code text\`
 And link: [text](url).
 
 > Text in blockquote
@@ -62,6 +56,6 @@ unordered list:
 
 describe('Common tests', () => {
   it('should correctly translate two texts (markdown to wiki)', () => {
-    expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    testTexts(wikiText, markdownText);
   });
 });
