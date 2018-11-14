@@ -36,13 +36,6 @@ describe(`Tests on bold markup`, () => {
     expect(markdownToWikitext(markdownText)).toBe(wikiText);
   });
 
-  it(`should change bold markup (many bold words in sentence)`, () => {
-    const wikiText = `'''Lorem''' ipsum '''dolor''' sit '''amet'''`;
-    const markdownText = '**Lorem** ipsum **dolor** sit **amet**';
-    expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
-    expect(markdownToWikitext(markdownText)).toBe(wikiText);
-  });
-
   it(`should change bold markup (another variant of wiki bold-markup)`, () => {
     const wikiText = `'''Lorem''' ipsum '''dolor''' sit '''amet'''`;
     const markdownText = '**Lorem** ipsum **dolor** sit **amet**';

@@ -34,6 +34,11 @@ function parseCode(line) {
   return line.replace(codeRegExp, `\`$1\``)
 }
 
+/* must go before parseBold and parseItalic */
+function parseBoldAndItalic(line) {
+  return line.replace(/[\']{5}([^\']*)[\']{5}/g, `***$1***`)
+}
+
 function parseBlockqoute(line) {
   if (line.match(blockquoteRegExp)) {
     let result = line.replace('<blockquote>', '').replace('</blockquote>', '');
@@ -48,7 +53,7 @@ function parseLink(line) {
   return line.replace(linkRegExp, `[$2]($1)`)
 }
 
-function parseBoldStyle(line) {
+function parseBold(line) {
   return line.replace(boldRegExp, '**');
 }
 
@@ -63,6 +68,7 @@ module.exports = text => text.split('\n')
   .map(parseCode)
   .map(parseBlockqoute)
   .map(parseLink)
-  .map(parseBoldStyle)
+  .map(parseBoldAndItalic)
+  .map(parseBold)
   .map(parseItalic)
   .join('\n')

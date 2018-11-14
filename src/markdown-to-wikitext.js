@@ -29,6 +29,11 @@ function parseCode(line) {
   return line.replace(codeRegExp, `<code>$1</code>`)
 }
 
+/* must go before parseBold and parseItalic */
+function parseBoldAndItalic(line) {
+  return line.replace(/[\*]{3}([^\*]*)[\*]{3}/g, `'''''$1'''''`)
+}
+
 function parseBlockqoute(line) {
   return line.match(/^[>][ ](.*)$/g) ?
     '<blockquote>' + line.slice(2, line.length) + '</blockquote>' :
@@ -39,7 +44,7 @@ function parseLink(line) {
   return line.replace(linkRegExp, `[$2 $1]`); /* [textl](url) */
 }
 
-function parseBoldStyle(line) {
+function parseBold(line) {
   return line.replace(boldRegExp, `'''`)
 }
 
@@ -56,6 +61,7 @@ module.exports = text => text.split('\n')
   .map(parseCode)
   .map(parseBlockqoute)
   .map(parseLink)
-  .map(parseBoldStyle)
+  .map(parseBoldAndItalic)
+  .map(parseBold)
   .map(parseItalic)
   .join('\n')
