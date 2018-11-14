@@ -32,13 +32,21 @@ function parseBoldAndItalic(line) { /* must go before parseBold and parseItalic 
   return line.replace(/[\']{5}([^\']*)[\']{5}/g, `***$1***`)
 }
 
-function parseBlockqoute(line) {
-  if (line.match(/<\s*blockquote[^>]*>(.*)<\s*\/\s*blockquote>/g)) {
-    let result = line.replace('<blockquote>', '').replace('</blockquote>', '');
+const BLOCKQUOTE_START = 'BLOCKQUOTE_START';
 
-    return '> ' + result;
+function parseBlockquote(line, index, arr) {
+  if (line.match(/\<blockquote\>(.*)\<\/blockquote\>/g)) { /* single blockquote */
+    return line.replace(/\<blockquote\>(.*)\<\/blockquote\>/g, `> $1`)
+  } else if (line === '<blockquote>' && arr.slice(index + 1, arr.length).find(e => e === '</blockquote>')) {
+    arr[index] = BLOCKQUOTE_START
+    /* here begins a blockquote with possible newlines */
+    return BLOCKQUOTE_START
+  } else if (line !== '</blockquote>' && arr[index - 1] && (arr[index - 1].match(/^[>]{1}[ ]{1}(.*)$/g) || arr[index - 1] === BLOCKQUOTE_START)) {
+    return arr[index] = line.replace(/^(.*)$/i, `> $1`)
+  } else if (line === '</blockquote>' && arr[index - 1].match(/^[>]{1}[ ]{1}(.*)$/g)) {
+    return ''
   } else {
-    return line;
+    return line
   }
 }
 
@@ -59,9 +67,10 @@ module.exports = text => text.split('\n')
   .map(parseHeadings)
   .map(parseUnorderedList)
   .map(parseCode)
-  .map(parseBlockqoute)
+  .map(parseBlockquote)
   .map(parseLink)
   .map(parseBoldAndItalic)
   .map(parseBold)
   .map(parseItalic)
+  .filter(e => e !== BLOCKQUOTE_START)
   .join('\n')

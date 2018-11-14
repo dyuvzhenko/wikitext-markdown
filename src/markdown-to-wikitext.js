@@ -25,7 +25,7 @@ function parseBoldAndItalic(line) { /* must go before parseBold and parseItalic 
   return line.replace(/[\*]{3}([^\*]*)[\*]{3}/g, `'''''$1'''''`)
 }
 
-function parseBlockqoute(line) {
+function parseBlockquote(line) {
   return line.match(/^[>][ ](.*)$/g) ?
     '<blockquote>' + line.slice(2, line.length) + '</blockquote>' :
     line
@@ -50,7 +50,7 @@ module.exports = text => text.split('\n')
   .map(parseUnorderedList)
   .map(parseOrderedList)
   .map(parseCode)
-  .map(parseBlockqoute)
+  .map(parseBlockquote)
   .map(parseLink)
   .map(parseBoldAndItalic)
   .map(parseBold)
