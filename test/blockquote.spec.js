@@ -11,6 +11,13 @@ describe(`Tests on blockquote markup`, () => {
   it(`should change blockquote markup (blockquote with many newlines)`, () => {
     const wikiText = `<blockquote>\nLorem\nipsum\ndolor\nsit\namet\n</blockquote>`;
     const markdownText = '> Lorem\n> ipsum\n> dolor\n> sit\n> amet\n';
+    // expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    testTexts(wikiText, markdownText);
+  });
+
+  it(`should change blockquote markup (blockquote with many newlines and one empty line)`, () => {
+    const wikiText = `<blockquote>\nLorem\nipsum\ndolor\nsit\n\namet\n</blockquote>`;
+    const markdownText = '> Lorem\n> ipsum\n> dolor\n> sit\n> \n> amet\n';
     expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
     // testTexts(wikiText, markdownText);
   });

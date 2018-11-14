@@ -25,10 +25,30 @@ function parseBoldAndItalic(line) { /* must go before parseBold and parseItalic 
   return line.replace(/[\*]{3}([^\*]*)[\*]{3}/g, `'''''$1'''''`)
 }
 
-function parseBlockquote(line) {
-  return line.match(/^[>][ ](.*)$/g) ?
-    '<blockquote>' + line.slice(2, line.length) + '</blockquote>' :
-    line
+function parseBlockquoteFirstPass(line) {
+  return line.replace(/^[>][ ](.*)$/g, `<blockquote>$1</blockquote>`)
+}
+
+function parseBlockquoteSecondPass(line, index, arr) {
+  /* all blockquote lines will be already in wiki-markup */
+  if (!line.match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+    return line
+  }
+  if (
+    arr[index - 1] && !arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g) &&
+    arr[index + 1] && !arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)
+  ) {
+    return line
+  }
+  let newLine = line.replace(/^<blockquote>(.*)<\/blockquote\>$/g, `$1`)
+  /* need we open tag? */
+  if (!arr[index - 1] || arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+    newLine = `<blockquote>\n` + newLine
+  }
+  if (!arr[index + 1] || arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+    newLine = newLine + `\n<blockquote>`
+  }
+  return newLine
 }
 
 function parseLink(line) {
@@ -50,7 +70,8 @@ module.exports = text => text.split('\n')
   .map(parseUnorderedList)
   .map(parseOrderedList)
   .map(parseCode)
-  .map(parseBlockquote)
+  .map(parseBlockquoteFirstPass)
+  .map(parseBlockquoteSecondPass)
   .map(parseLink)
   .map(parseBoldAndItalic)
   .map(parseBold)
