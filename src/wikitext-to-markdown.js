@@ -7,6 +7,14 @@ function parseOrderedList(line) { /* must go before parseHeadings */
   }
 }
 
+function setSequenceForOrderedList(line, index, arr) {
+  if (arr[index - 1] && arr[index - 1].match(/^(\d+)[.][ ](.*)$/g)) {
+    return arr[index] = line.replace(/^(\d+)[.][ ](.*)$/g, (Number(RegExp.$1) + 1) + '. $2')
+  } else {
+    return line;
+  }
+}
+
 function parseHeadings(line) {
   return line.match(/^([=]{1,6})[ ]{0,1}([^=]*)[ ]{0,1}([=]{1,6})[ ]*$/) ?
     line.replace(
@@ -69,6 +77,7 @@ function parseItalic(line) {
 
 module.exports = text => text.split('\n')
   .map(parseOrderedList)
+  .map(setSequenceForOrderedList)
   .map(parseHeadings)
   .map(parseUnorderedList)
   .map(parseCode)
