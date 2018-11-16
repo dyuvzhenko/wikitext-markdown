@@ -51,6 +51,10 @@ function parseBlockquote(line, index, arr) {
   }
 }
 
+function removeSpecialSymbols(line) {
+  return line !== BLOCKQUOTE_START && line !== BLOCKQUOTE_END
+}
+
 function parseLink(line) {
   return line.replace(/\[([^\s\]\[]*)[ ]{1}([^\]\[]*)\]/g, `[$2]($1)`)
 }
@@ -69,9 +73,9 @@ module.exports = text => text.split('\n')
   .map(parseUnorderedList)
   .map(parseCode)
   .map(parseBlockquote)
+  .filter(removeSpecialSymbols)
   .map(parseLink)
   .map(parseBoldAndItalic)
   .map(parseBold)
   .map(parseItalic)
-  .filter(e => e !== BLOCKQUOTE_START && e !== BLOCKQUOTE_END)
   .join('\n')
