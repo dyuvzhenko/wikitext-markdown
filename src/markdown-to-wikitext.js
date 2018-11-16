@@ -12,9 +12,7 @@ function parseUnorderedList(line) {
 }
 
 function parseOrderedList(line) {
-  return line.match(/^\d+[.][ ](.*)$/g) ?
-    '#' + line.slice(2, line.length) :
-    line
+  return line.replace(/^\d+[.][ ](.*)$/g, `# $1`)
 }
 
 function parseCode(line) {
@@ -29,23 +27,25 @@ function parseBlockquoteFirstPass(line) {
   return line.replace(/^[>][ ](.*)$/g, `<blockquote>$1</blockquote>`)
 }
 
+const blockquoteRegExp = /^<blockquote>(.*)<\/blockquote\>$/g
+
 function parseBlockquoteSecondPass(line, index, arr) {
   /* all blockquote lines will be already in wiki-markup */
-  if (!line.match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+  if (!line.match(blockquoteRegExp)) {
     return line
   }
   if (
-    arr[index - 1] && !arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g) &&
-    arr[index + 1] && !arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)
+    arr[index - 1] && !arr[index - 1].match(blockquoteRegExp) &&
+    arr[index + 1] && !arr[index + 1].match(blockquoteRegExp)
   ) {
-    return line.replace(/^<blockquote>(.*)<\/blockquote\>$/g, `<blockquote>\n$1\n</blockquote>`)
+    return line.replace(blockquoteRegExp, `<blockquote>\n$1\n</blockquote>`)
   }
-  let newLine = line.replace(/^<blockquote>(.*)<\/blockquote\>$/g, `$1`)
+  let newLine = line.replace(blockquoteRegExp, `$1`)
   /* need we open tag? */
-  if (!arr[index - 1] || !arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+  if (!arr[index - 1] || !arr[index - 1].match(blockquoteRegExp)) {
     newLine = `<blockquote>\n` + newLine
   }
-  if (!arr[index + 1] || !arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+  if (!arr[index + 1] || !arr[index + 1].match(blockquoteRegExp)) {
     newLine = newLine + `\n</blockquote>`
   }
   return newLine

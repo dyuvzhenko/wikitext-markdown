@@ -30,6 +30,8 @@ Ordered list:
 # second num
 # third num
 
+# Another list num
+
 unordered list:
 * first point
 * second point
@@ -58,8 +60,10 @@ And link: [text](url).
 
 Ordered list:
 1. first num
-1. second num
-1. third num
+2. second num
+3. third num
+
+1. Another list num
 
 unordered list:
 - first point
