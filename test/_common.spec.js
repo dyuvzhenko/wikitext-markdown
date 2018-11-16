@@ -11,7 +11,7 @@ const wikiText = `
 =Heading=
 
 Some ''italic'' and '''bold''' words.
-And '''bold''' in another variant.
+And '''''bold and italic'''''.
 And code: <code>code text</code>
 And link: [url text].
 
@@ -48,7 +48,7 @@ const markdownText = `
 # Heading
 
 Some _italic_ and **bold** words.
-And **bold** in another variant.
+And ***bold and italic***.
 And code: \`code text\`
 And link: [text](url).
 

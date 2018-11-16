@@ -75,16 +75,41 @@ function parseItalic(line) {
   return line.replace(/[\']{2}/g, '_')
 }
 
-module.exports = text => text.split('\n')
-  .map(parseOrderedList)
-  .map(setSequenceForOrderedList)
-  .map(parseHeadings)
-  .map(parseUnorderedList)
-  .map(parseCode)
-  .map(parseBlockquote)
-  .filter(removeSpecialSymbols)
-  .map(parseLink)
-  .map(parseBoldAndItalic)
-  .map(parseBold)
-  .map(parseItalic)
-  .join('\n')
+function skip(line) {
+  return line
+}
+
+/*
+options = {
+  skipOrderedList: true,
+  skipHeadings: true,
+  skipUnorderedList: true,
+  skipCode: true,
+  skipBlockquote: true,
+  skipLink: true,
+  skipBoldAndItalic: true,
+
+  customRules: []
+}
+*/
+module.exports = (text, options = {}) => {
+  let newText = text.split('\n')
+
+  if (options.customRules) {
+    options.customRules.forEach(rule => newText = newText.map(rule))
+  }
+
+  return newText
+    .map(options.skipOrderedList && skip || parseOrderedList)
+    .map(options.skipOrderedList && skip || setSequenceForOrderedList)
+    .map(options.skipHeadings && skip || parseHeadings)
+    .map(options.skipUnorderedList && skip || parseUnorderedList)
+    .map(options.skipCode && skip || parseCode)
+    .map(options.skipBlockquote && skip || parseBlockquote)
+    .filter(options.skipBlockquote && skip || removeSpecialSymbols)
+    .map(options.skipLink && skip || parseLink)
+    .map(options.skipBoldAndItalic && skip || parseBoldAndItalic)
+    .map(options.skipBoldAndItalic && skip || parseBold)
+    .map(options.skipBoldAndItalic && skip || parseItalic)
+    .join('\n')
+}

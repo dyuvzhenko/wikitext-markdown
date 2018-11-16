@@ -65,15 +65,40 @@ function parseItalic(line) {
     .replace(/\\[_]/g, '_') /* then take all simple symbol `_` who is screened and write it without `\` */
 }
 
-module.exports = text => text.split('\n')
-  .map(parseHeadings)
-  .map(parseUnorderedList)
-  .map(parseOrderedList)
-  .map(parseCode)
-  .map(parseBlockquoteFirstPass)
-  .map(parseBlockquoteSecondPass)
-  .map(parseLink)
-  .map(parseBoldAndItalic)
-  .map(parseBold)
-  .map(parseItalic)
-  .join('\n')
+function skip(line) {
+  return line
+}
+
+/*
+options = {
+  skipOrderedList: true,
+  skipHeadings: true,
+  skipUnorderedList: true,
+  skipCode: true,
+  skipBlockquote: true,
+  skipLink: true,
+  skipBoldAndItalic: true,
+
+  customRules: []
+}
+*/
+module.exports = (text, options = {}) => {
+  let newText = text.split('\n')
+
+  if (options.customRules) {
+    options.customRules.forEach(rule => newText = newText.map(rule))
+  }
+
+  return newText
+    .map(options.skipHeadings && skip || parseHeadings)
+    .map(options.skipUnorderedList && skip || parseUnorderedList)
+    .map(options.skipOrderedList && skip || parseOrderedList)
+    .map(options.skipCode && skip || parseCode)
+    .map(options.skipBlockquote && skip || parseBlockquoteFirstPass)
+    .map(options.skipBlockquote && skip || parseBlockquoteSecondPass)
+    .map(options.skipLink && skip || parseLink)
+    .map(options.skipBoldAndItalic && skip || parseBoldAndItalic)
+    .map(options.skipBoldAndItalic && skip || parseBold)
+    .map(options.skipBoldAndItalic && skip || parseItalic)
+    .join('\n')
+}
