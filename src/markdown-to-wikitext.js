@@ -38,15 +38,15 @@ function parseBlockquoteSecondPass(line, index, arr) {
     arr[index - 1] && !arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g) &&
     arr[index + 1] && !arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)
   ) {
-    return line
+    return line.replace(/^<blockquote>(.*)<\/blockquote\>$/g, `<blockquote>\n$1\n</blockquote>`)
   }
   let newLine = line.replace(/^<blockquote>(.*)<\/blockquote\>$/g, `$1`)
   /* need we open tag? */
-  if (!arr[index - 1] || arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+  if (!arr[index - 1] || !arr[index - 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
     newLine = `<blockquote>\n` + newLine
   }
-  if (!arr[index + 1] || arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
-    newLine = newLine + `\n<blockquote>`
+  if (!arr[index + 1] || !arr[index + 1].match(/^<blockquote>(.*)<\/blockquote\>$/g)) {
+    newLine = newLine + `\n</blockquote>`
   }
   return newLine
 }

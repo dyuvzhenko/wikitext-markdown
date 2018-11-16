@@ -1,4 +1,4 @@
-const { wikitextToMarkdown, markdownToWikitext } = require('../src');
+const { wikitextToMarkdown, markdownToWikitext } = require('../../src');
 
 module.exports = (wikiText, markdownText) => {
   expect(wikitextToMarkdown(wikiText)).toBe(markdownText);

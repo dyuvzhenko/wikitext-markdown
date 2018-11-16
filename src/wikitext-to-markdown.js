@@ -33,6 +33,7 @@ function parseBoldAndItalic(line) { /* must go before parseBold and parseItalic 
 }
 
 const BLOCKQUOTE_START = 'BLOCKQUOTE_START';
+const BLOCKQUOTE_END = 'BLOCKQUOTE_END';
 
 function parseBlockquote(line, index, arr) {
   if (line.match(/\<blockquote\>(.*)\<\/blockquote\>/g)) { /* single blockquote */
@@ -44,7 +45,7 @@ function parseBlockquote(line, index, arr) {
   } else if (line !== '</blockquote>' && arr[index - 1] && (arr[index - 1].match(/^[>]{1}[ ]{1}(.*)$/g) || arr[index - 1] === BLOCKQUOTE_START)) {
     return arr[index] = line.replace(/^(.*)$/i, `> $1`)
   } else if (line === '</blockquote>' && arr[index - 1].match(/^[>]{1}[ ]{1}(.*)$/g)) {
-    return ''
+    return BLOCKQUOTE_END
   } else {
     return line
   }
@@ -72,5 +73,5 @@ module.exports = text => text.split('\n')
   .map(parseBoldAndItalic)
   .map(parseBold)
   .map(parseItalic)
-  .filter(e => e !== BLOCKQUOTE_START)
+  .filter(e => e !== BLOCKQUOTE_START && e !== BLOCKQUOTE_END)
   .join('\n')

@@ -1,24 +1,57 @@
-const { wikitextToMarkdown, markdownToWikitext } = require('../src'); // TODO: remove
-const testTexts = require('./_testTexts');
+const testTexts = require('./utils/testTexts');
 
 describe(`Tests on blockquote markup`, () => {
   it(`should change blockquote markup (single)`, () => {
-    const wikiText = `<blockquote>Lorem ipsum dolor sit amet</blockquote>`;
-    const markdownText = '> Lorem ipsum dolor sit amet';
+    const markdownText = '> Lorem ipsum dolor sit amet',
+          wikiText = '<blockquote>' + '\n' +
+                     'Lorem ipsum dolor sit amet' + '\n' +
+                     '</blockquote>';
+    testTexts(wikiText, markdownText);
+  });
+
+  it(`should change blockquote markup (single in center of some text)`, () => {
+    const markdownText = 'Lorem ipsum dolor sit amet' + '\n' +
+                         '> consectetur adipiscing elit' + '\n' +
+                         'sed do eiusmod tempor',
+          wikiText = 'Lorem ipsum dolor sit amet' + '\n' +
+                     '<blockquote>' + '\n' +
+                     'consectetur adipiscing elit' + '\n' +
+                     '</blockquote>' + '\n' +
+                     'sed do eiusmod tempor';
     testTexts(wikiText, markdownText);
   });
 
   it(`should change blockquote markup (blockquote with many newlines)`, () => {
-    const wikiText = `<blockquote>\nLorem\nipsum\ndolor\nsit\namet\n</blockquote>`;
-    const markdownText = '> Lorem\n> ipsum\n> dolor\n> sit\n> amet\n';
-    // expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+    const markdownText = '> Lorem' + '\n' +
+                         '> ipsum' + '\n' +
+                         '> dolor' + '\n' +
+                         '> sit' + '\n' +
+                         '> amet',
+          wikiText = '<blockquote>' + '\n' +
+                     'Lorem' + '\n' +
+                     'ipsum' + '\n' +
+                     'dolor' + '\n' +
+                     'sit' + '\n' +
+                     'amet' + '\n' +
+                     '</blockquote>';
     testTexts(wikiText, markdownText);
   });
 
   it(`should change blockquote markup (blockquote with many newlines and one empty line)`, () => {
-    const wikiText = `<blockquote>\nLorem\nipsum\ndolor\nsit\n\namet\n</blockquote>`;
-    const markdownText = '> Lorem\n> ipsum\n> dolor\n> sit\n> \n> amet\n';
-    expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
-    // testTexts(wikiText, markdownText);
+    const markdownText = '> Lorem' + '\n' +
+                         '> ipsum' + '\n' +
+                         '> dolor' + '\n' +
+                         '> sit' + '\n' +
+                         '> ' + '\n' +
+                         '> amet',
+          wikiText = '<blockquote>' + '\n' +
+                     'Lorem' + '\n' +
+                     'ipsum' + '\n' +
+                     'dolor' + '\n' +
+                     'sit' + '\n' +
+                     '' + '\n' +
+                     'amet' + '\n' +
+                     '</blockquote>';
+    testTexts(wikiText, markdownText);
   });
 });

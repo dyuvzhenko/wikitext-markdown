@@ -1,4 +1,4 @@
-const testTexts = require('./_testTexts');
+const testTexts = require('./utils/testTexts');
 
 describe(`Tests on bold markup`, () => {
   it(`should change bold markup (first word in sentence)`, () => {

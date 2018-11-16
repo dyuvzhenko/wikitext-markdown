@@ -1,4 +1,4 @@
-const testTexts = require('./_testTexts');
+const testTexts = require('./utils/testTexts');
 
 /* Move this example to demo? */
 const wikiText = `
@@ -15,7 +15,15 @@ And '''bold''' in another variant.
 And code: <code>code text</code>
 And link: [url text].
 
-<blockquote>Text in blockquote</blockquote>
+<blockquote>
+single blockquote
+</blockquote>
+
+<blockquote>
+Text in blockquote
+
+with empty line in center
+</blockquote>
 
 Ordered list:
 # first num
@@ -27,6 +35,7 @@ unordered list:
 * second point
 * third point
 `;
+const nothing = '';
 const markdownText = `
   Headings:
 ###### Heading
@@ -41,7 +50,11 @@ And **bold** in another variant.
 And code: \`code text\`
 And link: [text](url).
 
+> single blockquote
+
 > Text in blockquote
+> ${nothing}
+> with empty line in center
 
 Ordered list:
 1. first num
