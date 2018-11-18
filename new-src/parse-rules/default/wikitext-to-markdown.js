@@ -1,5 +1,5 @@
-// wikitext-to-markdown.js
-function parseOrderedList(line) { /* must go before parseHeadings */
+// default/wikitext-to-markdown.js
+function orderedList(line) { /* must go before parseHeadings */
   if (line.match(/^[#]{1}[ ]{1}(.*)/g)) {
     return '1. ' + line.slice(2, line.length);
   } else {
@@ -15,7 +15,7 @@ function setSequenceForOrderedList(line, index, arr) {
   }
 }
 
-function parseHeadings(line) {
+function headings(line) {
   return line.match(/^([=]{1,6})[ ]{0,1}([^=]*)[ ]{0,1}([=]{1,6})[ ]*$/) ?
     line.replace(
       /^([=]{1,6})[ ]{0,1}([^=]*)[ ]{0,1}([=]{1,6})[ ]*$/,
@@ -24,7 +24,7 @@ function parseHeadings(line) {
     line
 }
 
-function parseUnorderedList(line) {
+function unorderedList(line) {
   if (line.match(/^[*](.*)/g)) {
     return '- ' + line.slice(2, line.length);
   } else {
@@ -32,19 +32,19 @@ function parseUnorderedList(line) {
   }
 }
 
-function parseCode(line) {
+function code(line) {
   return line.replace(/<code>([^\/]*)<\/code>/g, `\`$1\``)
 }
 
-function parseBoldAndItalic(line) { /* must go before parseBold and parseItalic */
+function boldAndItalic(line) { /* must go before parseBold and parseItalic */
   return line.replace(/[\']{5}([^\']*)[\']{5}/g, `***$1***`)
 }
 
 const BLOCKQUOTE_START = 'BLOCKQUOTE_START';
 const BLOCKQUOTE_END = 'BLOCKQUOTE_END';
 
-function parseBlockquote(line, index, arr) {
-  if (line.match(/\<blockquote\>[\n]{0,1}(.*)[\n]{0,1}\<\/blockquote\>/g)) { /* single blockquote */
+function blockquote(line, index, arr) {
+  if (line.match(/\<blockquote\>(.*)\<\/blockquote\>/g)) { /* single blockquote */
     return line.replace(/\<blockquote\>(.*)\<\/blockquote\>/g, `> $1`)
   } else if (line === '<blockquote>' && arr.slice(index + 1, arr.length).find(e => e === '</blockquote>')) {
     arr[index] = BLOCKQUOTE_START
@@ -63,53 +63,28 @@ function removeSpecialSymbols(line) {
   return line !== BLOCKQUOTE_START && line !== BLOCKQUOTE_END
 }
 
-function parseLink(line) {
+function link(line) {
   return line.replace(/\[([^\s\]\[]*)[ ]{1}([^\]\[]*)\]/g, `[$2]($1)`)
 }
 
-function parseBold(line) {
-  return line.replace(/<b>|<\/b>|'''/g, '**');
+function bold(line) {
+  return line.replace(/'''/g, '**');
 }
 
-function parseItalic(line) {
+function italic(line) {
   return line.replace(/[\']{2}/g, '_')
 }
 
-function skip(line) {
-  return line
-}
-
-/*
-options = {
-  skipOrderedList: true,
-  skipHeadings: true,
-  skipUnorderedList: true,
-  skipCode: true,
-  skipBlockquote: true,
-  skipLink: true,
-  skipBoldAndItalic: true,
-
-  customRules: []
-}
-*/
-module.exports = (text, options = {}) => {
-  let newText = text.split('\n')
-
-  if (options.customRules) {
-    options.customRules.forEach(rule => newText = newText.map(rule))
-  }
-
-  return newText
-    .map(options.skipOrderedList && skip || parseOrderedList)
-    .map(options.skipOrderedList && skip || setSequenceForOrderedList)
-    .map(options.skipHeadings && skip || parseHeadings)
-    .map(options.skipUnorderedList && skip || parseUnorderedList)
-    .map(options.skipCode && skip || parseCode)
-    .map(options.skipBlockquote && skip || parseBlockquote)
-    .filter(options.skipBlockquote && skip || removeSpecialSymbols)
-    .map(options.skipLink && skip || parseLink)
-    .map(options.skipBoldAndItalic && skip || parseBoldAndItalic)
-    .map(options.skipBoldAndItalic && skip || parseBold)
-    .map(options.skipBoldAndItalic && skip || parseItalic)
-    .join('\n')
-}
+module.exports = [
+  orderedList,
+  setSequenceForOrderedList,
+  headings,
+  unorderedList,
+  code,
+  boldAndItalic,
+  blockquote,
+  removeSpecialSymbols,
+  link,
+  bold,
+  italic
+]
