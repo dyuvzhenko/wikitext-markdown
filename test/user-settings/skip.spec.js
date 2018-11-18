@@ -1,5 +1,5 @@
 const testTexts = require('../_utils/testTexts');
-const Converter = require('../../new-src');
+const Converter = require('../../src');
 
 describe(`Tests on skip default parsing rules (single rule)`, () => {
   it(`should not change ordered markup`, () => {

@@ -1,4 +1,4 @@
-const Converter = require('../../../new-src');
+const Converter = require('../../../src');
 const testTexts = require('../../_utils/testTexts');
 
 describe(`Tests on blockquote markup`, () => {

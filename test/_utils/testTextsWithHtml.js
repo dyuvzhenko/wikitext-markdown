@@ -1,4 +1,4 @@
-const Converter = require('../../new-src');
+const Converter = require('../../src');
 
 module.exports = (wikiText, markdownText) => {
   const converter = new Converter({ preset: 'default-with-html' });

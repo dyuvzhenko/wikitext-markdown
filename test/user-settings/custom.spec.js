@@ -1,4 +1,4 @@
-const Converter = require('../../new-src');
+const Converter = require('../../src');
 
 describe(`Tests on skip default parsing rules`, () => {
   it(`should correctly use custom parsing rules (wiki to markdown)`, () => {

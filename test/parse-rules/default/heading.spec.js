@@ -1,4 +1,4 @@
-const Converter = require('../../../new-src');
+const Converter = require('../../../src');
 
 const MAX_LEVEL_HEADING = 6;
 
