@@ -1,11 +1,12 @@
-const { wikitextToMarkdown, markdownToWikitext } = require('../src');
-const testTexts = require('./utils/testTexts');
+const Converter = require('../../../new-src');
+const testTexts = require('../../_utils/testTexts');
 
 describe(`Tests on blockquote markup`, () => {
   it(`should change blockquote markup (single without new lines)`, () => {
     const markdownText = '> Lorem ipsum dolor sit amet',
-          wikiText = '<blockquote>Lorem ipsum dolor sit amet</blockquote>';
-    expect(wikitextToMarkdown(wikiText)).toBe(markdownText);
+          wikiText = '<blockquote>Lorem ipsum dolor sit amet</blockquote>',
+          converter = new Converter();
+    expect(converter.toMarkdown(wikiText)).toBe(markdownText);
   });
 
   it(`should change blockquote markup (single with new lines)`, () => {

@@ -1,4 +1,4 @@
-const testTexts = require('./utils/testTexts');
+const testTexts = require('../../_utils/testTexts');
 
 /* Move this example to demo? */
 const wikiText = `

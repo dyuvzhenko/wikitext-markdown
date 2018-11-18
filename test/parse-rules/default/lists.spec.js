@@ -1,4 +1,4 @@
-const testTexts = require('./utils/testTexts');
+const testTexts = require('../../_utils/testTexts');
 
 describe(`Tests on ordered list markup`, () => {
   it(`should change ordered list markup (from 1 to 3)`, () => {

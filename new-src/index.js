@@ -9,6 +9,10 @@ class Converter {
 
     /* skip rules selected by user */
     if (settings.skip && Array.isArray(settings.skip)) {
+      if (settings.skip.some(e => e === 'blockquote')) { // TODO: remove that
+        settings.skip = [...settings.skip, 'blockquoteFirstPass', 'blockquoteSecondPass']
+      }
+
       toMarkdownRules = toMarkdownRules.filter(func => !settings.skip.some(e => e === func.name))
       toWikiRules = toWikiRules.filter(func => !settings.skip.some(e => e === func.name))
     }

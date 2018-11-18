@@ -1,4 +1,4 @@
-const testTexts = require('./utils/testTexts');
+const testTexts = require('../../_utils/testTexts');
 
 describe(`Tests on italic markup`, () => {
   it(`should change italic markup (first word in sentence)`, () => {

@@ -6,7 +6,7 @@ const htmlParseToWiki = require('./parse-rules/html/markdown-to-wikitext');
 
 function getRulesForParseWikitextToMarkdown(preset) {
   return preset === 'default' ? defaultParseToMarkdown :
-      preset === 'default-with-html' ? [...defaultParseToMarkdown, ...htmlParseToMarkdown] :
+    preset === 'default-with-html' ? [...defaultParseToMarkdown, ...htmlParseToMarkdown] :
       [] /* no rules for wrong preset name */
 }
 

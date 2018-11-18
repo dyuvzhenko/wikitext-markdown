@@ -1,4 +1,4 @@
-const testTexts = require('./utils/testTexts');
+const testTexts = require('../../_utils/testTexts');
 
 describe(`Tests on link markup`, () => {
   it(`should change link markup (simple case)`, () => {
