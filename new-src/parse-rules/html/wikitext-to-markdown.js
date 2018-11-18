@@ -1,36 +1,36 @@
 // html/wikitext-to-markdown.js
-function orderedList(line) {}
+function htmlOrderedList(line) {}
 
-function setSequenceForOrderedList(line) {}
+function htmlSetSequenceForOrderedList(line) {}
 
-function headings(line) {}
+function htmlHeadings(line) {}
 
-function unorderedList(line) {}
+function htmlUnorderedList(line) {}
 
-function code(line) {}
+function htmlCode(line) {}
 
-function boldAndItalic(line) {}
+function htmlBoldAndItalic(line) {}
 
-function blockquote(line, index, arr) {}
+function htmlBlockquote(line, index, arr) {}
 
-function removeSpecialSymbols(line) {}
+function htmlRemoveSpecialSymbols(line) {}
 
-function link(line) {}
+function htmlLink(line) {}
 
-function bold(line) {}
+function htmlBold(line) {}
 
-function italic(line) {}
+function htmlItalic(line) {}
 
 module.exports = [
-  // orderedList,
-  // setSequenceForOrderedList,
-  // headings,
-  // unorderedList,
-  // code,
-  // boldAndItalic,
-  // blockquote,
-  // removeSpecialSymbols,
-  // link,
-  // bold,
-  // italic
+  // htmlOrderedList,
+  // htmlSetSequenceForOrderedList,
+  // htmlHeadings,
+  // htmlUnorderedList,
+  // htmlCode,
+  // htmlBoldAndItalic,
+  // htmlBlockquote,
+  // htmlRemoveSpecialSymbols,
+  // htmlLink,
+  // htmlBold,
+  // htmlItalic
 ]

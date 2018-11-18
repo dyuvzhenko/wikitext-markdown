@@ -1,33 +1,33 @@
 // html/markdown-to-wikitext.js
-function headings(line) {}
+function htmlHeadings(line) {}
 
-function unorderedList(line) {}
+function htmlUnorderedList(line) {}
 
-function orderedList(line) {}
+function htmlOrderedList(line) {}
 
-function code(line) {}
+function htmlCode(line) {}
 
-function boldAndItalic(line) {}
+function htmlBoldAndItalic(line) {}
 
-function blockquoteFirstPass(line) {}
+function htmlBlockquoteFirstPass(line) {}
 
-function blockquoteSecondPass(line) {}
+function htmlBlockquoteSecondPass(line) {}
 
-function link(line) {}
+function htmlLink(line) {}
 
-function bold(line) {}
+function htmlBold(line) {}
 
-function italic(line) {}
+function htmlItalic(line) {}
 
 module.exports = [
-  // headings,
-  // unorderedList,
-  // orderedList,
-  // code,
-  // boldAndItalic,
-  // blockquoteFirstPass,
-  // blockquoteSecondPass,
-  // link,
-  // bold,
-  // italic
+  // htmlHeadings,
+  // htmlUnorderedList,
+  // htmlOrderedList,
+  // htmlCode,
+  // htmlBoldAndItalic,
+  // htmlBlockquoteFirstPass,
+  // htmlBlockquoteSecondPass,
+  // htmlLink,
+  // htmlBold,
+  // htmlItalic
 ]
