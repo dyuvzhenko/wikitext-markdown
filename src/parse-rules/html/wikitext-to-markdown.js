@@ -17,9 +17,13 @@ function htmlRemoveSpecialSymbols(line) {}
 
 function htmlLink(line) {}
 
-function htmlBold(line) {}
+function htmlBold(line) {
+  return line.replace(/<b>(.*)<\/b>/g, `**$1**`)
+}
 
-function htmlItalic(line) {}
+function htmlItalic(line) {
+  return line.replace(/<i>(.*)<\/i>/g, `_$1_`)
+}
 
 module.exports = [
   // htmlOrderedList,
@@ -31,6 +35,6 @@ module.exports = [
   // htmlBlockquote,
   // htmlRemoveSpecialSymbols,
   // htmlLink,
-  // htmlBold,
-  // htmlItalic
+  htmlBold,
+  htmlItalic
 ]

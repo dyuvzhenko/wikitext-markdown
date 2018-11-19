@@ -15,9 +15,13 @@ function htmlBlockquoteSecondPass(line) {}
 
 function htmlLink(line) {}
 
-function htmlBold(line) {}
+function htmlBold(line) {
+  return line.replace(/<b>(.*)<\/b>/g, `'''$1'''`)
+}
 
-function htmlItalic(line) {}
+function htmlItalic(line) {
+  return line.replace(/<i>(.*)<\/i>/g, `''$1''`)
+}
 
 module.exports = [
   // htmlHeadings,
@@ -28,6 +32,6 @@ module.exports = [
   // htmlBlockquoteFirstPass,
   // htmlBlockquoteSecondPass,
   // htmlLink,
-  // htmlBold,
-  // htmlItalic
+  htmlBold,
+  htmlItalic
 ]
