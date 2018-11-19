@@ -1,8 +1,8 @@
 {
   "name": "wikitext-markdown",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Package for convert data from wiki-markup to markdown-markup, and back",
+  "main": "src/index.js",
   "scripts": {
     "test": "jest"
   },
