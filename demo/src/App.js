@@ -14,14 +14,14 @@ class App extends Component {
     }
   }
 
-  changeWikiText(e) {
+  changeWikiText = (e) => {
     this.setState({
       wikiText: e.target.value,
       markdownText: this.converter.toMarkdown(e.target.value)
     })
   }
 
-  changeMarkdownText(e) {
+  changeMarkdownText = (e) => {
     this.setState({
       markdownText: e.target.value,
       wikiText: this.converter.toWiki(e.target.value)
@@ -33,8 +33,8 @@ class App extends Component {
     return (
       <div style={{'textAlign': 'center'}}>
         <h2>Convert data from wiki to markdown</h2>
-        <textarea style={textareaStyle} value={wikiText} onChange={this.changeWikiText.bind(this)} />
-        <textarea style={textareaStyle} value={markdownText} onChange={this.changeMarkdownText.bind(this)} />
+        <textarea style={textareaStyle} value={wikiText} onChange={this.changeWikiText} />
+        <textarea style={textareaStyle} value={markdownText} onChange={this.changeMarkdownText} />
       </div>
     );
   }

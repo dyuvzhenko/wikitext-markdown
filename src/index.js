@@ -9,7 +9,7 @@ class Converter {
 
     /* skip rules selected by user */
     if (settings.skip && Array.isArray(settings.skip)) {
-      if (settings.skip.some(e => e === 'blockquote')) { // TODO: remove that
+      if (settings.skip.some(e => e === 'blockquote')) {
         settings.skip = [...settings.skip, 'blockquoteFirstPass', 'blockquoteSecondPass']
       }
 
@@ -41,7 +41,7 @@ class Converter {
   toMarkdown(text) {
     let newText = text.split('\n')
     this.toMarkdownRules.forEach(rule => newText = newText.map(rule))
-    newText = newText.filter(line => line !== 'BLOCKQUOTE_START' && line !== 'BLOCKQUOTE_END') // TODO: remove that
+    newText = newText.filter(line => line !== 'BLOCKQUOTE_START' && line !== 'BLOCKQUOTE_END')
     return newText.join('\n')
   }
 }
