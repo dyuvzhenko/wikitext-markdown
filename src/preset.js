@@ -4,16 +4,32 @@ const defaultParseToWiki = require('./parse-rules/default/markdown-to-wikitext')
 const htmlParseToMarkdown = require('./parse-rules/html/wikitext-to-markdown');
 const htmlParseToWiki = require('./parse-rules/html/markdown-to-wikitext');
 
+const presets = ['default', 'default-with-html'];
+
+function checkPresetName(preset) {
+  if (presets.indexOf(preset) === -1) {
+    console.warn(`Invalid preset name ${preset}. Fallback to default`);
+  }
+}
+
 function getRulesForParseWikitextToMarkdown(preset) {
-  return preset === 'default' ? defaultParseToMarkdown :
-    preset === 'default-with-html' ? [...defaultParseToMarkdown, ...htmlParseToMarkdown] :
-      [] /* no rules for wrong preset name */
+  checkPresetName(preset);
+  switch (preset) {
+    case 'default-with-html':
+      return [...defaultParseToMarkdown, ...htmlParseToMarkdown];
+    default:
+      return defaultParseToMarkdown;
+  }
 }
 
 function getRulesForParseMarkdownToWikitext(preset) {
-  return preset === 'default' ? defaultParseToWiki :
-    preset === 'default-with-html' ? [...defaultParseToWiki, ...htmlParseToWiki] :
-      [] /* no rules for wrong preset name */
+  checkPresetName(preset);
+  switch (preset) {
+    case 'default-with-html':
+      return [...defaultParseToWiki, ...htmlParseToWiki];
+    default:
+      return defaultParseToWiki;
+  }
 }
 
 module.exports = {
