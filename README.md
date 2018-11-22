@@ -59,4 +59,4 @@ The option that allows you to add your custom rules for text parsing.
 - Array `wikiToMarkdown` will apply rules for method `converter.toMarkdown('==wiki text==')`
 - Array `markdownToWiki` will apply rules for method `converter.toWiki('## markdown text')`
 
-Should be considered, that your text in method like `converter.toWiki` will be split by `\n` and the rule you write should be a `map` function that will be take each line, then parse and find wanted markup and return new created line.
+Should be considered, that your text in method like `converter.toWiki` will be split by `\n` and the rule you write should be a `map` function that will take each line, then parse and find wanted markup and return new created line.
