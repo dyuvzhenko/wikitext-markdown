@@ -10,7 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/khajjit/wikitext-markdown.git"
   },
-  "author": "",
+  "author": {
+    "name": "khajjit",
+    "email": "yuvzhenko8@gmail.com"
+  },
+  "keywords": [
+    "text",
+    "data",
+    "converting",
+    "markdown",
+    "wiki"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/khajjit/wikitext-markdown/issues"
