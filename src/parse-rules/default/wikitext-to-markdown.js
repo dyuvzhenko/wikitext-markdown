@@ -59,10 +59,6 @@ function blockquote(line, index, arr) {
   }
 }
 
-// function removeSpecialSymbols(line) {
-//   return line !== BLOCKQUOTE_START && line !== BLOCKQUOTE_END
-// }
-
 function link(line) {
   return line.replace(/\[([^\s\]\[]*)[ ]{1}([^\]\[]*)\]/g, `[$2]($1)`)
 }
@@ -83,7 +79,6 @@ module.exports = [
   code,
   boldAndItalic,
   blockquote,
-  // removeSpecialSymbols,
   link,
   bold,
   italic
